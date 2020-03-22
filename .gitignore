@@ -11,6 +11,7 @@
 /[Mm]emoryCaptures/
 /Pitfall2020/Library
 /Pitfall2020/Logs
+/Pitfall2020/obj
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
