@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public CharacterController2D controller;
+    public Animator animator;
+
     public Rigidbody2D rb;
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -28,10 +31,16 @@ public class PlayerController : MonoBehaviour
         horizontalVelocity = joystick.Horizontal * runSpeed;
         verticalVelocity = joystick.Vertical;
 
+        animator.SetFloat("Speed", Mathf.Abs(horizontalVelocity)); 
+
+        if(horizontalVelocity != 0){
+            controller.Move(horizontalVelocity);
+        }
+
         rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
-        if (verticalVelocity >= 0.5f && onGround) {
+        if (verticalVelocity >= 0.5f/* && onGround*/) {
             rb.velocity = new Vector2(rb.velocity.x, 5);
         }
 
