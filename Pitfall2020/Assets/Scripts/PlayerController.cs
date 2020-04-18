@@ -7,42 +7,75 @@ public class PlayerController : MonoBehaviour
     public CharacterController2D controller;
     public Animator animator;
 
-    public Rigidbody2D rb;
-    public Transform groundCheck;
-    public float groundCheckRadius;
-    public LayerMask whatIsGround;
-    private bool onGround;
+    bool jump = false;
+    bool crouch = false;
+
+    public bool isClimbing;
+    public float climbingSpeed = 10.0f;
+    public LayerMask whatIsLadder;
+    public int climbDirection;
     public float runSpeed = 10.0f;
     float horizontalVelocity = 0f;
-    float verticalVelocity = 0f;
+    // float verticalVelocity = 0f;
 
     public Joystick joystick;
+    public float distanceRaycast;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
 
     // Update is called once per frame
     void Update()
     {
+
         horizontalVelocity = joystick.Horizontal * runSpeed;
-        verticalVelocity = joystick.Vertical;
+        // verticalVelocity = joystick.Vertical;
 
         animator.SetFloat("Speed", Mathf.Abs(horizontalVelocity)); 
 
-        if(horizontalVelocity != 0){
-            controller.Move(horizontalVelocity);
+        if (joystick.Vertical >= 0.5f && !jump  && !isClimbing) {
+            jump = true;
+            animator.SetBool("IsJumping", true);
+        } 
+
+        if(joystick.Vertical <= -0.5f ){
+            crouch = true;
+        } else if(joystick.Vertical > -0.5f){
+            crouch = false;
         }
 
-        rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
-        onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+    }
 
-        if (verticalVelocity >= 0.5f/* && onGround*/) {
-            rb.velocity = new Vector2(rb.velocity.x, 5);
+    public void OnLanding(){
+        animator.SetBool("IsJumping", false);
+    }
+
+    void FixedUpdate()
+    {
+        controller.Move(horizontalVelocity * Time.fixedDeltaTime, crouch, jump);
+        jump = false;
+
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distanceRaycast, whatIsLadder);
+
+
+        if(hitInfo.collider != null){
+            isClimbing = true;
+            // if(Mathf.Abs(joystick.Vertical) > 0.2f ){
+                
+               
+            // }
+        }else{
+            isClimbing = false;
         }
 
+        if(isClimbing == true){
+             if(joystick.Vertical > 0.2f) {
+                    climbDirection = 1;
+                }else if(joystick.Vertical > 0.2f){
+                    climbDirection = -1;
+                }else climbDirection = 0;
+            controller.ChangeGravity(0);
+            controller.Climb(horizontalVelocity * Time.fixedDeltaTime, (float)climbDirection * climbingSpeed);
+        }else{
+            controller.ChangeGravity(4);
+        }
     }
 }
