@@ -59,19 +59,26 @@ public class PlayerController : MonoBehaviour
         if(hitInfo.collider != null){
             isClimbing = true;
             // if(Mathf.Abs(joystick.Vertical) > 0.2f ){
-                
+           
                
             // }
         }else{
             isClimbing = false;
+            animator.SetBool("IsClimbing", false);
         }
 
         if(isClimbing == true){
-             if(joystick.Vertical > 0.2f) {
+            animator.SetBool("IsClimbing",true);
+            animator.SetFloat("ClimbSpeed", Mathf.Abs(joystick.Vertical));
+             if(joystick.Vertical > 0.25f) {
                     climbDirection = 1;
-                }else if(joystick.Vertical > 0.2f){
+                    
+                }else if(joystick.Vertical < -0.25f){
                     climbDirection = -1;
-                }else climbDirection = 0;
+                    //.SetBool("IsClimbing",true);
+                }else {
+                    climbDirection = 0;
+                    }
             controller.ChangeGravity(0);
             controller.Climb(horizontalVelocity * Time.fixedDeltaTime, (float)climbDirection * climbingSpeed);
         }else{
