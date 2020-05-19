@@ -7,16 +7,16 @@ public class MonsterController : MonoBehaviour
     private float hSpeed = 25.0f;
 
     private float vSpeed = 15.0f;
-    private float verticalRange = 1.0f;
+    private float verticalRange = 0.70f;
     private float horizontalRange = 5.0f;
 
     private bool movingRight;
     private bool movingUp;
 
 
-    private float startX = -6.0f;
+    private float startX;
 
-    private float startY = -2.0f;
+    private float startY;
 
     private Rigidbody2D m_Body;
 
@@ -24,6 +24,8 @@ public class MonsterController : MonoBehaviour
     void Start()
     {
         m_Body = GetComponent<Rigidbody2D>();
+        startX = m_Body.transform.position.x;
+        startY = m_Body.transform.position.y;
     }
 
     // Update is called once per frame
