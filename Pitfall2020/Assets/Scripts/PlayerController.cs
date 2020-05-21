@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     bool crouch = false;
 
     public bool isClimbing;
+    public bool canClimb;
     public float climbingSpeed = 10.0f;
     public LayerMask whatIsLadder;
     public int climbDirection;
@@ -25,9 +26,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(Mathf.Abs(joystick.Horizontal) > 0.1f){
         horizontalVelocity = joystick.Horizontal * runSpeed;
-        // verticalVelocity = joystick.Vertical;
+        }else{horizontalVelocity = 0;}
 
         animator.SetFloat("Speed", Mathf.Abs(horizontalVelocity)); 
 
@@ -50,18 +51,16 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        
         controller.Move(horizontalVelocity * Time.fixedDeltaTime, crouch, jump);
+        
         jump = false;
-
+        
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distanceRaycast, whatIsLadder);
-
+            
 
         if(hitInfo.collider != null){
             isClimbing = true;
-            // if(Mathf.Abs(joystick.Vertical) > 0.2f ){
-           
-               
-            // }
         }else{
             isClimbing = false;
             animator.SetBool("IsClimbing", false);
@@ -75,7 +74,6 @@ public class PlayerController : MonoBehaviour
                     
                 }else if(joystick.Vertical < -0.25f){
                     climbDirection = -1;
-                    //.SetBool("IsClimbing",true);
                 }else {
                     climbDirection = 0;
                     }
