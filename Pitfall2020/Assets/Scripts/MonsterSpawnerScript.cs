@@ -24,7 +24,7 @@ public class MonsterSpawnerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Spawn();
+        Spawn();
     }
 
     // Update is called once per frame
