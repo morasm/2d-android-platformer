@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Ladder
   - Platform
+  - Coin
+  - Enemy
+  - Scores
+  - Diamond
+  - Medicine
   layers:
   - Default
   - TransparentFX
