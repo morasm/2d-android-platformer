@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public CollectedDiamonds collectedDiamonds;
     public Text txt;
     public Text diamondTxt;
-
+    public AudioClip audioClip;
     public Text healthTxt;
     void Start(){
         txt.text = "Scores: " + cc.points.ToString();
@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.tag == "Enemy"){
+            AudioSource.PlayClipAtPoint(audioClip, transform.position);
             health -= 10f;
         }else if(other.gameObject.tag == "Medicine" && health <=50){
             health += 30f;
