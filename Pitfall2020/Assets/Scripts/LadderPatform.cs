@@ -22,14 +22,14 @@ public class LadderPatform : MonoBehaviour
             
         }
 
-        if(joystick.Vertical < -0.20f && playerController.isClimbing){
+        if(joystick.Vertical < -0.20f){// && playerController.isClimbing
             if(waitTime <= 0){
                 effector.rotationalOffset = 180;
                 waitTime = 0.5f;
             }else{
                 waitTime -= Time.deltaTime;
             }
-        }else if(!playerController.isClimbing || joystick.Vertical > 0.2f){//joystick.Vertical > 0.2f
+        }else if(joystick.Vertical > 0.2f){//joystick.Vertical > 0.2f!playerController.isClimbing || 
             effector.rotationalOffset = 0;
         }
     

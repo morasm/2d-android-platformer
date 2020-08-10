@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,11 +18,22 @@ public class PlayerController : MonoBehaviour
     public int climbDirection;
     public float runSpeed = 10.0f;
     float horizontalVelocity = 0f;
-    // float verticalVelocity = 0f;
+    float health = 100f;
 
     public Joystick joystick;
     public float distanceRaycast;
 
+    public CollectedCoins cc;
+    public CollectedDiamonds collectedDiamonds;
+    public Text txt;
+    public Text diamondTxt;
+
+    public Text healthTxt;
+    void Start(){
+        txt.text = "Scores: " + cc.points.ToString();
+        diamondTxt.text = collectedDiamonds.diamonds.ToString() + "/5";
+        healthTxt.text = health.ToString();
+    }
 
     // Update is called once per frame
     void Update()
@@ -43,6 +55,15 @@ public class PlayerController : MonoBehaviour
             crouch = false;
         }
 
+        txt.text = "Scores: " + cc.points.ToString();
+        diamondTxt.text = collectedDiamonds.diamonds.ToString() + "/5";
+
+        if(health > 0){
+            healthTxt.text = health.ToString();
+        }else{
+            FindObjectOfType<GameManager>().EndGame();
+        }
+        
     }
 
     public void OnLanding(){
@@ -83,4 +104,15 @@ public class PlayerController : MonoBehaviour
             controller.ChangeGravity(4);
         }
     }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.tag == "Enemy"){
+            health -= 10f;
+        }else if(other.gameObject.tag == "Medicine" && health <=50){
+            health += 30f;
+            Destroy(gameObject);
+        }
+    }
+
 }
